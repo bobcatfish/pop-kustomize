@@ -1,8 +1,10 @@
+set -ex
+
 # Cleanup script to delete the three clusters created by the gke-cluster-init.sh script
 # bail if PROJECT_ID is not set
 if [[ -z "${PROJECT_ID}" ]]; then
   echo "The value of PROJECT_ID is not set. Be sure to run export PROJECT_ID=YOUR-PROJECT first"
-  return
+  exit 1
 fi
 # sets the current project for gcloud
 gcloud config set project $PROJECT_ID
