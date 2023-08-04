@@ -7,11 +7,12 @@ The demo will be used to display:
 - [x] Cloud workstations
 - [x] GCB triggering
 - [x] Build and push to AR
-- [] Cloud Deploy promotion across environments
+- [x] Cloud Deploy deploy to test
+- [x] Cloud Deploy promotion across environments
 - [] Image scanning (AR can do this on push)
 - [] Provenance generation
 - [] Cloud Deploy canary deployment
-- [] Cloud Deploy label: allows link back to git sha
+- [] Cloud Deploy label to link back to git sha
 - [] DORA stats (Cloud Deploy?)
 - [] Security insights in Cloud Deploy (can show cloud build panel at least, ideally both)
 - [] Binauthz gating of deployment
@@ -38,17 +39,6 @@ gcloud services enable \
   secretmanager.googleapis.com \
   containeranalysis.googleapis.com
 ```
-
-## Add CI
-
-### Setup a Cloud Build trigger on PRs
-
-Configure Cloud Build to run each time a change is pushed to the main branch. To do this, add a Trigger in Cloud Build:
-  1. Follow https://cloud.google.com/build/docs/automating-builds/github/connect-repo-github to connect
-     your GitHub repo
-  2. Follow https://cloud.google.com/build/docs/automating-builds/github/build-repos-from-github?generation=2nd-gen to setup triggering:
-    * Setup PR triggering to run cloudbuild-test.yaml
-    * Setup triggering on the `main` branch to run cloudbuild-deploy.yaml
 
 ## Add Deployment
 
@@ -107,7 +97,7 @@ permission to pull containers from artifact registry:
 gcloud projects add-iam-policy-binding $PROJECT_ID \
     --member=serviceAccount:$(gcloud projects describe $PROJECT_ID \
     --format="value(projectNumber)")-compute@developer.gserviceaccount.com \
-    --role="roles/artifactregistry.readt er"
+    --role="roles/artifactregistry.reader"
 
 # (TODO: why)
 # add the Kubernetes developer permission:
@@ -124,14 +114,6 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
     --role="roles/clouddeploy.jobRunner"
 ```
 
-#### Set up the trigger
-
-Follow https://cloud.google.com/build/docs/automating-builds/github/build-repos-from-github?generation=2nd-gen to setup triggering:
-  * Setup triggering on the `main` branch to run cloudbuild-deploy.yaml
-
-Do a push to the `main` branch and observe that the Cloud Deploy rollout is successful
-at https://pantheon.corp.google.com/deploy/delivery-pipelines.
-
 ## (Optional) Turn on automated container vulnerability analysis
 Google Cloud Container Analysis can be set to automatically scan for vulnerabilities on push (see [pricing](https://cloud.google.com/container-analysis/pricing)). 
 
@@ -143,7 +125,25 @@ Enable Container Analysis API for automated scanning:
 gcloud services enable \
   containerscanning.googleapis.com
 ```
+## Add CI
 
+### Setup a Cloud Build trigger on PRs
+
+Configure Cloud Build to run each time a change is pushed to the main branch. To do this, add a Trigger in Cloud Build:
+  1. Follow https://cloud.google.com/build/docs/automating-builds/github/connect-repo-github to connect
+     your GitHub repo
+  2. Follow https://cloud.google.com/build/docs/automating-builds/github/build-repos-from-github?generation=2nd-gen to setup triggering:
+    * Setup PR triggering to run cloudbuild.yaml
+
+Open a PR to create a Cloud Deploy release and deploy it to the
+the `test` environment.  You can see the progress via the
+[Google Cloud Deploy UI](https://console.cloud.google.com/deploy/delivery-pipelines).
+
+## Promote the release
+
+In the [Google Cloud Deploy UI](https://console.cloud.google.com/deploy/delivery-pipelines),
+you can promote the release from test to staging, and from staging to prod (with a manual
+approval step in between).
 
 ## Demo Overview
 
@@ -158,7 +158,6 @@ cloudbuild.yaml</walkthrough-editor-open-file>  configuration file, which:
 3. You can then navigate to Google Cloud Deploy UI and shows promotion events:
   * test cluster to staging clusters
   * staging cluster to product cluster, with approval gate
-
 
 ## Tear down
 
