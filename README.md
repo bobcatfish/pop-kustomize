@@ -30,9 +30,13 @@ export PROJECT_ID=<walkthrough-project-id/>
 gcloud config set project $PROJECT_ID
 # Enables various APIs you'll need
 gcloud services enable \
-  container.googleapis.com cloudbuild.googleapis.com \
-  artifactregistry.googleapis.com clouddeploy.googleapis.com \
-  cloudresourcemanager.googleapis.com secretmanager.googleapis.com
+  container.googleapis.com \
+  cloudbuild.googleapis.com \
+  artifactregistry.googleapis.com \
+  clouddeploy.googleapis.com \
+  cloudresourcemanager.googleapis.com \
+  secretmanager.googleapis.com \
+  containeranalysis.googleapis.com
 ```
 
 ## Add CI
