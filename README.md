@@ -9,7 +9,7 @@ The demo will be used to display:
 - [x] Build and push to AR
 - [x] Cloud Deploy deploy to test
 - [x] Cloud Deploy promotion across environments
-- [] Image scanning (AR can do this on push)
+- [x] Image scanning
 - [] Provenance generation
 - [] Cloud Deploy canary deployment
 - [] Cloud Deploy label to link back to git sha
@@ -114,16 +114,13 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
     --role="roles/clouddeploy.jobRunner"
 ```
 
-## (Optional) Turn on automated container vulnerability analysis
+## Turn on automated container vulnerability analysis
 Google Cloud Container Analysis can be set to automatically scan for vulnerabilities on push (see [pricing](https://cloud.google.com/container-analysis/pricing)). 
 
 Enable Container Analysis API for automated scanning:
 
-<walkthrough-enable-apis apis="containerscanning.googleapis.com"></walkthrough-enable-apis>
-
 ```bash
-gcloud services enable \
-  containerscanning.googleapis.com
+gcloud services enable containerscanning.googleapis.com --project=$PROJECT_ID
 ```
 ## Add CI
 
