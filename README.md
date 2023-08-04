@@ -10,11 +10,12 @@ The demo will be used to display:
 - [x] Cloud Deploy deploy to test
 - [x] Cloud Deploy promotion across environments
 - [x] Image scanning
-- [] Provenance generation
+- [x] Cloud Build security insights
+- [x] Provenance generation
+- [x] Cloud Deploy security insights
 - [] Cloud Deploy canary deployment
 - [] Cloud Deploy label to link back to git sha
 - [] DORA stats (Cloud Deploy?)
-- [] Security insights in Cloud Deploy (can show cloud build panel at least, ideally both)
 - [] Binauthz gating of deployment
 
 ## Setup tutorial
@@ -90,6 +91,9 @@ You must give Cloud Build explicit permission to trigger a Google Cloud Deploy r
 3. Add these two roles
   * Cloud Deploy Releaser
   * Service Account User
+  * Making "gcloud artifacts docker images describe" work:
+    * Container Analysis Admin + service agent (probably overkill?)
+    * Artifact registry reader (???)
 
 You must give the service account that runs your kubernetes workloads
 permission to pull containers from artifact registry:
@@ -148,6 +152,11 @@ the `test` environment.  You can see the progress via the
 In the [Google Cloud Deploy UI](https://console.cloud.google.com/deploy/delivery-pipelines),
 you can promote the release from test to staging, and from staging to prod (with a manual
 approval step in between).
+
+## Security insights
+
+* View Cloud Build security insights via the Cloud Build history view: https://cloud.google.com/build/docs/view-build-security-insights
+* View Cloud Deploy security insights via the release artifacts view: https://cloud.google.com/deploy/docs/securing/security-insights
 
 ## Demo Overview
 

@@ -13,17 +13,20 @@ steps:
   # Push the container image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/pop-stats/pop-stats:${COMMIT_SHA}']
-  # Create release in Google Cloud Deploy
+  # Create release in Google Cloud Deploy using the digest of the newly built image
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
-    entrypoint: gcloud
-    args: 
-      [
-        "deploy", "releases", "create", "rel-${SHORT_SHA}",
-        "--delivery-pipeline", "pop-stats-pipeline",
-        "--region", "us-central1",
-        "--annotations", "commitId=${REVISION_ID}",
-        "--images", "pop-stats=us-central1-docker.pkg.dev/$PROJECT_ID/pop-stats/pop-stats:${COMMIT_SHA}"
-      ]
+    entrypoint: bash
+    args:
+    - -c
+    - |
+      gcloud artifacts docker images describe \
+        'us-central1-docker.pkg.dev/$PROJECT_ID/pop-stats/pop-stats:${COMMIT_SHA}' \
+        --format 'value(image_summary.digest)' > digest
+      gcloud deploy releases create rel-${SHORT_SHA} \
+        --delivery-pipeline pop-stats-pipeline \
+        --region us-central1 \
+        --annotations commitId=${REVISION_ID} \
+        --images pop-stats=us-central1-docker.pkg.dev/$PROJECT_ID/pop-stats/pop-stats:${COMMIT_SHA}@$(cat digest)
 images:
 - us-central1-docker.pkg.dev/$PROJECT_ID/pop-stats/pop-stats:${COMMIT_SHA}
 options:
