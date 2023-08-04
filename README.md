@@ -104,13 +104,19 @@ You must give Cloud Build explicit permission to trigger a Google Cloud Deploy r
 You must give the service account that runs your kubernetes workloads
 permission to pull containers from artifact registry:
 ```bash
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member=serviceAccount:$(gcloud projects describe $PROJECT_ID \
+    --format="value(projectNumber)")-compute@developer.gserviceaccount.com \
+    --role="roles/artifactregistry.readt er"
+
+# (TODO: why)
 # add the Kubernetes developer permission:
 gcloud projects add-iam-policy-binding $PROJECT_ID \
     --member=serviceAccount:$(gcloud projects describe $PROJECT_ID \
     --format="value(projectNumber)")-compute@developer.gserviceaccount.com \
     --role="roles/container.developer"
 
-# (TODO: is this one required as well?)
+# (TODO: why)
 # add the clouddeploy.jobRunner role to your compute service account
 gcloud projects add-iam-policy-binding $PROJECT_ID \
     --member=serviceAccount:$(gcloud projects describe $PROJECT_ID \
