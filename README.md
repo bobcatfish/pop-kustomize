@@ -7,7 +7,7 @@ The demo will be used to display:
 - [x] Cloud workstations
 - [x] GCB triggering
 - [x] Build and push to AR
-- [x] Cloud Deploy promotion across environments
+- [] Cloud Deploy promotion across environments
 - [] Image scanning (AR can do this on push)
 - [] Provenance generation
 - [] Cloud Deploy canary deployment
@@ -51,8 +51,10 @@ Configure Cloud Build to run each time a change is pushed to the main branch. To
 ### Setup AR repo to push images to
 
 ```bash
-gcloud artifacts repositories create pop-stats --location=us-central1 \
---repository-format=docker
+gcloud artifacts repositories create pop-stats
+  --location=us-central1 \
+  --repository-format=docker \
+   --project=$PROJECT_ID
 ```
 
 ### Create Google Cloud Deploy pipeline
@@ -98,6 +100,9 @@ You must give Cloud Build explicit permission to trigger a Google Cloud Deploy r
 
 Follow https://cloud.google.com/build/docs/automating-builds/github/build-repos-from-github?generation=2nd-gen to setup triggering:
   * Setup triggering on the `main` branch to run cloudbuild-deploy.yaml
+
+Do a push to the `main` branch and observe that the Cloud Deploy rollout is successful
+at https://pantheon.corp.google.com/deploy/delivery-pipelines.
 
 ## (Optional) Turn on automated container vulnerability analysis
 Google Cloud Container Analysis can be set to automatically scan for vulnerabilities on push (see [pricing](https://cloud.google.com/container-analysis/pricing)). 
