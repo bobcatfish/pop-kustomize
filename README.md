@@ -91,6 +91,7 @@ Verify that they were created in the [GKE UI](https://pantheon.corp.google.com/k
 ### Setup a Cloud Build trigger to deploy on merge to main
 
 #### IAM and service account setup
+
 You must give Cloud Build explicit permission to trigger a Google Cloud Deploy release.
 1. Read the [docs](https://cloud.google.com/deploy/docs/integrating-ci)
 2. Navigate to [IAM](https://console.cloud.google.com/iam-admin/iam)
@@ -99,6 +100,23 @@ You must give Cloud Build explicit permission to trigger a Google Cloud Deploy r
 3. Add these two roles
   * Cloud Deploy Releaser
   * Service Account User
+
+You must give the service account that runs your kubernetes workloads
+permission to pull containers from artifact registry:
+```bash
+# add the Kubernetes developer permission:
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member=serviceAccount:$(gcloud projects describe $PROJECT_ID \
+    --format="value(projectNumber)")-compute@developer.gserviceaccount.com \
+    --role="roles/container.developer"
+
+# (TODO: is this one required as well?)
+# add the clouddeploy.jobRunner role to your compute service account
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member=serviceAccount:$(gcloud projects describe $PROJECT_ID \
+    --format="value(projectNumber)")-compute@developer.gserviceaccount.com \
+    --role="roles/clouddeploy.jobRunner"
+```
 
 #### Set up the trigger
 
