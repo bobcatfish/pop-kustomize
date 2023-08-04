@@ -76,7 +76,7 @@ Create the GKE clusters:
 ./bootstrap/gke-cluster-init.sh
 ```
 
-Verify that they were created in the [GKE UI](https://pantheon.corp.google.com/kubernetes/list/overview)
+Verify that they were created in the [GKE UI](https://console.cloud.google.com/kubernetes/list/overview)
 
 ### Setup a Cloud Build trigger to deploy on merge to main
 
@@ -122,6 +122,13 @@ Enable Container Analysis API for automated scanning:
 ```bash
 gcloud services enable containerscanning.googleapis.com --project=$PROJECT_ID
 ```
+
+You can now view the vulnerabilities of each image in artifact registry
+(e.g. `https://console.cloud.google.com/artifacts/docker/<your project>/<your region>/pop-stats/pop-stats`).
+
+Images are scanned when built, so previously built images will not have vulnerabilities
+listed. Open a PR to trigger a build and the newly built image will be scanned.
+
 ## Add CI
 
 ### Setup a Cloud Build trigger on PRs
