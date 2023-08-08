@@ -13,10 +13,10 @@ The demo will be used to display:
 - [x] Cloud Build security insights
 - [x] Provenance generation
 - [x] Cloud Deploy security insights
-- [] Cloud Deploy canary deployment
-- [] Cloud Deploy label to link back to git sha
-- [] DORA stats (Cloud Deploy?)
+- [] Cloud Deploy canary deployment w/ verification
+- [] DORA stats in Cloud Deploy
 - [] Binauthz gating of deployment
+- [] Local development w/ minikube
 
 ## Setup tutorial
 
