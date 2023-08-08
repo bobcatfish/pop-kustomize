@@ -19,6 +19,7 @@ steps:
     args:
     - -c
     - |
+      set -ex
       gcloud artifacts docker images describe \
         'us-central1-docker.pkg.dev/$PROJECT_ID/pop-stats/pop-stats:${COMMIT_SHA}' \
         --format 'value(image_summary.digest)' > digest
@@ -27,6 +28,19 @@ steps:
         --region us-central1 \
         --annotations commitId=${REVISION_ID} \
         --images pop-stats=us-central1-docker.pkg.dev/$PROJECT_ID/pop-stats/pop-stats:${COMMIT_SHA}@$(cat digest)
+      while :
+      do
+        STATE=$(gcloud deploy rollouts describe rel-${SHORT_SHA}-to-test-0001 \
+        --delivery-pipeline pop-stats-pipeline \
+        --region us-central1 \
+        --release rel-${SHORT_SHA} \
+        --format 'value(state)')
+       if [[ "$$STATE" == "FAILED" ]]; then
+        exit 1
+       elif [[ "$$STATE" == "SUCCEEDED" ]]; then
+        exit 0
+       fi
+      done
 images:
 - us-central1-docker.pkg.dev/$PROJECT_ID/pop-stats/pop-stats:${COMMIT_SHA}
 options:
