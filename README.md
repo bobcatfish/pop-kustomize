@@ -14,9 +14,8 @@ The demo will be used to display:
 - [x] Provenance generation
 - [x] Cloud Deploy security insights
 - [] Cloud Deploy canary deployment w/ verification
-- [] DORA stats in Cloud Deploy
 - [] Binauthz gating of deployment
-- [] Local development w/ minikube
+- [x] Local development w/ minikube
 
 ## Setup tutorial
 
