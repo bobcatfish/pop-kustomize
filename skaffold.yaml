@@ -3,9 +3,6 @@ kind: Config
 metadata:
   name: pop-stats
 build:
-# Uncomment if you're using minikube for local dev and don't want to push to Artifact Registry
-#  local: 
-#    push: false
   artifacts:
   - image: pop-stats
     context: app
