@@ -39,6 +39,7 @@ steps:
         exit 1
        elif [[ "$$STATE" == "SUCCEEDED" ]]; then
         exit 0
+        sleep 5
        fi
       done
 images:
