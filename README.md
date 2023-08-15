@@ -47,18 +47,11 @@ gcloud services enable \
 ### Setup AR repo to push images to
 
 
-Create the repository:
+Create the repository with automatic SBOM generation:
 ```bash
-gcloud artifacts repositories create pop-stats
+gcloud artifacts repositories create pop-stats \
   --location=us-central1 \
   --repository-format=docker \
-  --project=$PROJECT_ID
-```
-
-Enable SBOM generation (can also do this as part of repository creation):
-```bash
-gcloud artifacts repositories update pop-stats\
-  --location=us-central1 \
   --project=$PROJECT_ID \
   --allow-sbom-generation
 ```
