@@ -38,18 +38,29 @@ gcloud services enable \
   clouddeploy.googleapis.com \
   cloudresourcemanager.googleapis.com \
   secretmanager.googleapis.com \
-  containeranalysis.googleapis.com
+  containeranalysis.googleapis.com \
+  containerscanning.googleapis.com 
 ```
 
 ## Add Deployment
 
 ### Setup AR repo to push images to
 
+
+Create the repository:
 ```bash
 gcloud artifacts repositories create pop-stats
   --location=us-central1 \
   --repository-format=docker \
-   --project=$PROJECT_ID
+  --project=$PROJECT_ID
+```
+
+Enable SBOM generation (can also do this as part of repository creation):
+```bash
+gcloud artifacts repositories update pop-stats\
+  --location=us-central1 \
+  --project=$PROJECT_ID \
+  --allow-sbom-generation
 ```
 
 ### Create Google Cloud Deploy pipeline
