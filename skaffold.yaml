@@ -1,4 +1,4 @@
-apiVersion: skaffold/v3alpha1
+apiVersion: skaffold/v4beta4
 kind: Config
 metadata:
   name: pop-stats
@@ -14,11 +14,13 @@ manifests:
       - k8s/overlays/dev
 verify:
 - name: successful-request
+  executionMode:
+    kubernetesCluster: {}
   container:
     name: alpine
     image: alpine
     command: ["/bin/sh"]
-    args: ["-c", "wget localhost:8080"]
+    args: ["-c", "wget http://pop-stats:8080"]
 portForward:
 - resourceType: deployment
   resourceName: pop-stats
