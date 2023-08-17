@@ -13,7 +13,7 @@ The demo will be used to display:
 - [x] Cloud Build security insights
 - [x] Provenance generation
 - [x] Cloud Deploy security insights
-- [] Cloud Deploy canary deployment w/ verification
+- [x] Cloud Deploy canary deployment w/ verification
 - [] Binauthz gating of deployment
 - [x] Local development w/ minikube
 
