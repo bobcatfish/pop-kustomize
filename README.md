@@ -14,6 +14,7 @@ The demo will be used to display:
 - [x] Provenance generation
 - [x] Cloud Deploy security insights
 - [x] Cloud Deploy canary deployment w/ verification
+- [x] Cloud Deploy with parallel deployment
 - [] Binauthz gating of deployment
 - [x] Local development w/ minikube
 
@@ -74,7 +75,9 @@ Verify that the Google Cloud Deploy pipeline was created in the
 Create the GKE clusters:
 * testcluster
 * stagingcluster
-* productcluster
+* prodcluster1
+* prodcluster2
+* prodcluster3
 
 ```bash
 ./bootstrap/gke-cluster-init.sh

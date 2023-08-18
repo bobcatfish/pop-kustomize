@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: pop-stats
   labels:
-    env: prod1
+    env: prod3
 spec:
   replicas: 3
   template:
