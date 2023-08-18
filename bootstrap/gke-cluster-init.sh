@@ -1,4 +1,3 @@
-set -ex
 # Creates 3 GKE autopilot clusters
 # Initializes APIS, sets up the Google Cloud Deploy pipeline
 # bail if PROJECT_ID is not set
@@ -18,10 +17,21 @@ gcloud beta container --project "$PROJECT_ID" clusters create-auto "stagingclust
 --region "us-central1" --release-channel "regular" --network "projects/$PROJECT_ID/global/networks/default" \
 --subnetwork "projects/$PROJECT_ID/regions/us-central1/subnetworks/default" \
 --cluster-ipv4-cidr "/17" --services-ipv4-cidr "/22" --async
-# Prod cluster
-echo "creating prodcluster..."
-gcloud beta container --project "$PROJECT_ID" clusters create-auto "prodcluster" \
+# Prod clusters
+echo "creating prodcluster1..."
+gcloud beta container --project "$PROJECT_ID" clusters create-auto "prodcluster1" \
 --region "us-central1" --release-channel "regular" --network "projects/$PROJECT_ID/global/networks/default" \
 --subnetwork "projects/$PROJECT_ID/regions/us-central1/subnetworks/default" \
+--cluster-ipv4-cidr "/17" --services-ipv4-cidr "/22" --async
+echo "creating prodcluster2..."
+gcloud beta container --project "$PROJECT_ID" clusters create-auto "prodcluster2" \
+--region "europe-west1" --release-channel "regular" --network "projects/$PROJECT_ID/global/networks/default" \
+--subnetwork "projects/$PROJECT_ID/regions/europe-west1/subnetworks/default" \
+--cluster-ipv4-cidr "/17" --services-ipv4-cidr "/22" --async
+echo "Creating clusters! Check the UI for progress"
+echo "creating prodcluster3..."
+gcloud beta container --project "$PROJECT_ID" clusters create-auto "prodcluster3" \
+--region "asia-northeast1" --release-channel "regular" --network "projects/$PROJECT_ID/global/networks/default" \
+--subnetwork "projects/$PROJECT_ID/regions/asia-northeast1/subnetworks/default" \
 --cluster-ipv4-cidr "/17" --services-ipv4-cidr "/22" --async
 echo "Creating clusters! Check the UI for progress"

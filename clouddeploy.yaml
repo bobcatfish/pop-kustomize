@@ -43,12 +43,35 @@ description: staging cluster
 gke:
   cluster: projects/project-id-here/locations/us-central1/clusters/stagingcluster
 ---
-
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: prod
-description: prod cluster
+description: prod multi-target
 requireApproval: true
+multiTarget:
+  targetIds: [prod1, prod2, prod3]
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: prod1
+description: prod cluster 1
 gke:
-  cluster: projects/project-id-here/locations/us-central1/clusters/prodcluster
+  cluster: projects/project-id-here/locations/us-central1/clusters/prodcluster1
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: prod2
+description: prod cluster 2
+gke:
+  cluster: projects/project-id-here/locations/europe-west1/clusters/prodcluster2
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: prod3
+description: prod cluster 3
+gke:
+  cluster: projects/project-id-here/locations/asia-northeast1/clusters/prodcluster3
