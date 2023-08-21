@@ -1,0 +1,12 @@
+gkePolicy:
+  checkSets:
+  - checks:
+    - displayName: My SLSA check
+      slsaCheck:
+        rules:
+        - attestationSource:
+            containerAnalysisAttestationProjects:
+            - projects/ATTESTATION_PROJECT_ID
+          configBasedBuildRequired: true
+          trustedBuilder: GOOGLE_CLOUD_BUILD
+    displayName: My check set
