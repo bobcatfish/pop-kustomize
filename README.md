@@ -39,7 +39,8 @@ gcloud services enable \
   cloudresourcemanager.googleapis.com \
   secretmanager.googleapis.com \
   containeranalysis.googleapis.com \
-  containerscanning.googleapis.com 
+  containerscanning.googleapis.com \
+  binaryauthorization.googleapis.com
 ```
 
 ## Add Deployment
@@ -163,6 +164,20 @@ approval step in between).
 
 * View Cloud Build security insights via the Cloud Build history view: https://cloud.google.com/build/docs/view-build-security-insights
 * View Cloud Deploy security insights via the release artifacts view: https://cloud.google.com/deploy/docs/securing/security-insights
+
+## binauthz gating
+
+### Create binauthz policy
+
+```bash
+# customize the clouddeploy.yaml 
+sed -i "s/project-id-here/${PROJECT_ID}/" binauthz-policy.yaml
+# create the policy
+gcloud beta container binauthz policy create build-as-code \
+    --platform=gke \
+    --policy-file=binauthz-policy.yaml \
+    --project=$PROJECT_ID
+```
 
 ## Demo Overview
 
