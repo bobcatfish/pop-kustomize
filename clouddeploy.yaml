@@ -6,6 +6,9 @@ metadata:
 description: pop-stats application delivery pipeline
 serialPipeline:
  stages:
+ - targetId: staging
+   profiles:
+   - staging
  - targetId: prod
    profiles:
    - prod
@@ -23,8 +26,17 @@ serialPipeline:
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
+  name: staging
+description: staging cluster
+gke:
+  cluster: projects/project-id-here/locations/us-central1/clusters/stagingcluster
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
   name: prod
 description: prod multi-target
+requireApproval: true
 multiTarget:
   targetIds: [prod1, prod2, prod3]
 ---
