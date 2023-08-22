@@ -73,7 +73,6 @@ Verify that the Google Cloud Deploy pipeline was created in the
 ### Create Google Cloud Deploy pipeline
 
 Create the GKE clusters:
-* testcluster
 * stagingcluster
 * prodcluster1
 * prodcluster2
@@ -179,17 +178,17 @@ gcloud beta container binauthz policy create build-as-code \
 gcloud beta container clusters update prodcluster1 \
     --location=us-central1 \
     --binauthz-evaluation-mode=POLICY_BINDINGS_AND_PROJECT_SINGLETON_POLICY_ENFORCE \
-    --binauthz-policy-bindings=name=projects/catw-farm/platforms/gke/policies/build-as-code \
+    --binauthz-policy-bindings=name=projects/$PROJECT_ID/platforms/gke/policies/build-as-code \
     --project=$PROJECT_ID
 gcloud beta container clusters update prodcluster2 \
     --location=europe-west1 \
     --binauthz-evaluation-mode=POLICY_BINDINGS_AND_PROJECT_SINGLETON_POLICY_ENFORCE \
-    --binauthz-policy-bindings=name=projects/catw-farm/platforms/gke/policies/build-as-code \
+    --binauthz-policy-bindings=name=projects/$PROJECT_ID/platforms/gke/policies/build-as-code \
     --project=$PROJECT_ID
 gcloud beta container clusters update prodcluster3 \
     --location=asia-northeast1 \
     --binauthz-evaluation-mode=POLICY_BINDINGS_AND_PROJECT_SINGLETON_POLICY_ENFORCE \
-    --binauthz-policy-bindings=name=projects/catw-farm/platforms/gke/policies/build-as-code \
+    --binauthz-policy-bindings=name=projects/$PROJECT_ID/platforms/gke/policies/build-as-code \
     --project=$PROJECT_ID
 ```
 
@@ -212,7 +211,7 @@ gcloud auth configure-docker us-central1-docker.pkg.dev
 docker push $IMAGE
 
 # start a pod in a production cluster that uses the image
-gcloud container clusters get-credentials prodcluster1 --region us-central1 --project catw-farm
+gcloud container clusters get-credentials prodcluster1 --region us-central1 --project $PROJECT_ID
 kubectl run sneakypod --image=${IMAGE}
 ```
 
@@ -225,7 +224,7 @@ You will see the audit logs show up several hours later:
 gcloud logging read \
      --order="desc" \
      --freshness=7d \
-     --project=catw-farm \
+     --project=$PROJECT_ID \
     'logName:"binaryauthorization.googleapis.com%2Fcontinuous_validation" "build-as-code"'
 ```
 
