@@ -9,6 +9,16 @@ serialPipeline:
  - targetId: prod
    profiles:
    - prod
+   strategy:
+    canary:
+      runtimeConfig:
+        kubernetes:
+          serviceNetworking:
+            service: "pop-stats"
+            deployment: "pop-stats"
+      canaryDeployment:
+        percentages: [5]
+        verify: true
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
