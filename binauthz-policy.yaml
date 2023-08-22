@@ -6,7 +6,7 @@ gkePolicy:
         rules:
         - attestationSource:
             containerAnalysisAttestationProjects:
-            - projects/ATTESTATION_PROJECT_ID
+            - projects/catw-farm
           configBasedBuildRequired: true
           trustedBuilder: GOOGLE_CLOUD_BUILD
     displayName: My check set
