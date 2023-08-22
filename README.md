@@ -15,7 +15,7 @@ The demo will be used to display:
 - [x] Cloud Deploy security insights
 - [x] Cloud Deploy canary deployment w/ verification
 - [x] Cloud Deploy with parallel deployment
-- [] Binauthz gating of deployment
+- [x] Binauthz gating of deployment
 - [x] Local development w/ minikube
 
 ## Setup tutorial
@@ -177,6 +177,57 @@ gcloud beta container binauthz policy create build-as-code \
     --platform=gke \
     --policy-file=binauthz-policy.yaml \
     --project=$PROJECT_ID
+gcloud beta container clusters update prodcluster1 \
+    --location=us-central1 \
+    --binauthz-evaluation-mode=POLICY_BINDINGS_AND_PROJECT_SINGLETON_POLICY_ENFORCE \
+    --binauthz-policy-bindings=name=projects/catw-farm/platforms/gke/policies/build-as-code \
+    --project=$PROJECT_ID
+gcloud beta container clusters update prodcluster2 \
+    --location=europe-west1 \
+    --binauthz-evaluation-mode=POLICY_BINDINGS_AND_PROJECT_SINGLETON_POLICY_ENFORCE \
+    --binauthz-policy-bindings=name=projects/catw-farm/platforms/gke/policies/build-as-code \
+    --project=$PROJECT_ID
+gcloud beta container clusters update prodcluster3 \
+    --location=asia-northeast1 \
+    --binauthz-evaluation-mode=POLICY_BINDINGS_AND_PROJECT_SINGLETON_POLICY_ENFORCE \
+    --binauthz-policy-bindings=name=projects/catw-farm/platforms/gke/policies/build-as-code \
+    --project=$PROJECT_ID
+```
+
+### Make sure it works
+
+The binauthz policy should prevent the following scenarios from succeeding:
+* Pushing an image built locally
+* Building an image using an inline cloudbuild.yaml
+
+Build and push an image locally:
+
+```bash
+# build the image
+export LAZY=lazy-$(date +%s)
+export IMAGE="us-central1-docker.pkg.dev/$PROJECT_ID/pop-stats/pop-stats:$LAZY"
+docker build app/ -t $IMAGE -f app/Dockerfile
+
+# push the image
+gcloud auth configure-docker us-central1-docker.pkg.dev
+docker push $IMAGE
+
+# start a pod in a production cluster that uses the image
+gcloud container clusters get-credentials prodcluster1 --region us-central1 --project catw-farm
+kubectl run sneakypod --image=${IMAGE}
+```
+
+You can also try using an inline cloudbuild.yaml by creating a manual trigger
+using the same cloudbuild.yaml in this repo.
+
+You will see the audit logs show up several hours later:
+
+```bash
+gcloud logging read \
+     --order="desc" \
+     --freshness=7d \
+     --project=catw-farm \
+    'logName:"binaryauthorization.googleapis.com%2Fcontinuous_validation" "build-as-code"'
 ```
 
 ## Demo Overview
