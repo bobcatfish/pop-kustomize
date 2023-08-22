@@ -1,12 +1,12 @@
 gkePolicy:
   checkSets:
   - checks:
-    - displayName: My SLSA check
+    - displayName: Require build as code
       slsaCheck:
         rules:
         - attestationSource:
             containerAnalysisAttestationProjects:
-            - projects/catw-farm
+            - projects/project-id-here
           configBasedBuildRequired: true
           trustedBuilder: GOOGLE_CLOUD_BUILD
-    displayName: My check set
+    displayName: GKE required checks
