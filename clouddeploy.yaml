@@ -29,7 +29,7 @@ metadata:
   name: staging
 description: staging cluster
 gke:
-  cluster: projects/project-id-here/locations/us-central1/clusters/stagingcluster
+  cluster: projects/catw-farm/locations/us-central1/clusters/stagingcluster
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
