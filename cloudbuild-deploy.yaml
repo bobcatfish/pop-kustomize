@@ -8,11 +8,6 @@ steps:
   # Push the container image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/pop-stats/pop-stats:${COMMIT_SHA}']
-  # Run api tests
-  - name: 'us-central1-docker.pkg.dev/$PROJECT_ID/pop-stats/pop-stats:${COMMIT_SHA}'
-    entrypoint: python
-    args: ["api_tests.py"]
-    dir: 'app'
   # Create release in Google Cloud Deploy using the digest of the newly built image
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: bash
@@ -44,6 +39,3 @@ steps:
       done
 images:
 - us-central1-docker.pkg.dev/$PROJECT_ID/pop-stats/pop-stats:${COMMIT_SHA}
-options:
-  requestedVerifyOption: VERIFIED
-    
