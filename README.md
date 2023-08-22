@@ -48,13 +48,12 @@ gcloud services enable \
 ### Setup AR repo to push images to
 
 
-Create the repository with automatic SBOM generation:
+Create the repository:
 ```bash
 gcloud artifacts repositories create pop-stats \
   --location=us-central1 \
   --repository-format=docker \
-  --project=$PROJECT_ID \
-  --allow-sbom-generation
+  --project=$PROJECT_ID
 ```
 
 ### Create Google Cloud Deploy pipeline
@@ -178,20 +177,6 @@ gcloud beta container binauthz policy create build-as-code \
     --policy-file=binauthz-policy.yaml \
     --project=$PROJECT_ID
 ```
-
-## Demo Overview
-
-[![Demo flow](https://user-images.githubusercontent.com/76225123/145627874-86971a34-768b-4fc0-9e96-d7a769961321.png)](https://user-images.githubusercontent.com/76225123/145627874-86971a34-768b-4fc0-9e96-d7a769961321.png)
-
-The demo flow outlines a typical developer pathway, submitting a change to a Git repo which then triggers a CI/CD process:
-1. Push a change the main branch of your forked repo. You can make any change such as a trivial change to the README.md file.
-2. A Cloud Build job is automatically triggered, using the <walkthrough-editor-open-file filePath="cloudbuild.yaml">
-cloudbuild.yaml</walkthrough-editor-open-file>  configuration file, which:
-  * builds and pushes impages to Artifact Registry
-  * creates a Google Cloud Deploy release in the pipeline
-3. You can then navigate to Google Cloud Deploy UI and shows promotion events:
-  * test cluster to staging clusters
-  * staging cluster to product cluster, with approval gate
 
 ## Tear down
 
