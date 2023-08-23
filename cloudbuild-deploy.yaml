@@ -25,7 +25,7 @@ steps:
         --images pop-stats=us-central1-docker.pkg.dev/$PROJECT_ID/pop-stats/pop-stats:${COMMIT_SHA}@$(cat digest)
       while :
       do
-        STATE=$(gcloud deploy rollouts describe rel-${SHORT_SHA}-to-test-0001 \
+        STATE=$(gcloud deploy rollouts describe rel-${SHORT_SHA}-to-staging-0001 \
         --delivery-pipeline pop-stats-pipeline \
         --region us-central1 \
         --release rel-${SHORT_SHA} \
