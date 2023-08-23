@@ -17,10 +17,18 @@ verify:
   executionMode:
     kubernetesCluster: {}
   container:
-    name: alpine
+    name: verification
     image: alpine
-    command: ["/bin/sh"]
-    args: ["-c", "wget http://pop-stats:8080"]
+    command: ["sh"]
+    args:
+    - -c
+    - |
+      set -ex
+      REQUEST_COUNT=100
+      for _ in $(seq $REQUEST_COUNT)
+      do
+        wget http://pop-stats:8080
+      done
 portForward:
 - resourceType: deployment
   resourceName: pop-stats
