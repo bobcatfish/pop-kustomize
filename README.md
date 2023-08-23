@@ -18,6 +18,16 @@ The demo will be used to display:
 - [x] Binauthz gating of deployment
 - [x] Local development w/ minikube
 
+## This build will fail to run
+
+Deploy it straight to prod:
+```bash
+gcloud deploy releases create rel-bad-$(date +%s) \
+  --delivery-pipeline pop-stats-pipeline \
+  --region us-central1 \
+  --images pop-stats=${IMAGE}
+```
+
 ## Setup tutorial
 
 After forking the repo, follow along here.

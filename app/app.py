@@ -8,6 +8,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
+    raise Exception("oh no this is very bad")
     #if no query string, use geolocation
     # site name from env variable
     site_name = os.environ.get('SITE_NAME')
