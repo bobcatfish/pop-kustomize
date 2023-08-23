@@ -11,14 +11,6 @@ steps:
     entrypoint: python
     args: ["api_tests.py"]
     dir: 'app'
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
-    entrypoint: bash
-    args:
-    - -c
-    - |
-      set -ex
-      gcloud artifacts sbom export \
-        --uri=us-central1-docker.pkg.dev/$PROJECT_ID/pop-stats/pop-stats:${COMMIT_SHA}
 images:
 - us-central1-docker.pkg.dev/$PROJECT_ID/pop-stats/pop-stats:${COMMIT_SHA}
 options:
