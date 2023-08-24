@@ -20,8 +20,6 @@ The demo will be used to display:
 
 ## Setup tutorial
 
-After forking the repo, follow along here.
-
 ## Setup: enable APIs
 
 Set the PROJECT_ID environment variable. This variable will be used in forthcoming steps.
@@ -56,33 +54,56 @@ gcloud artifacts repositories create pop-stats \
   --project=$PROJECT_ID
 ```
 
-### Create Google Cloud Deploy pipeline
-
-Create the cloud deploy pipeline:
-```bash
-# customize the clouddeploy.yaml 
-sed -i "s/project-id-here/${PROJECT_ID}/" clouddeploy.yaml
-# creates the Google Cloud Deploy pipeline
-gcloud deploy apply --file clouddeploy.yaml \
-  --region=us-central1 --project=$PROJECT_ID
-```
-
-Verify that the Google Cloud Deploy pipeline was created in the 
-[Google Cloud Deploy UI](https://console.cloud.google.com/deploy/delivery-pipelines)
-
-### Create Google Cloud Deploy pipeline
+### Create GKE clusters
 
 Create the GKE clusters:
-* stagingcluster
-* prodcluster1
-* prodcluster2
-* prodcluster3
 
 ```bash
 ./bootstrap/gke-cluster-init.sh
 ```
 
 Verify that they were created in the [GKE UI](https://console.cloud.google.com/kubernetes/list/overview)
+
+### Build up the pipeline
+
+```bash
+# customize the clouddeploy.yamls
+export IDENTIFIER=$(date +%s)
+sed -i "s/project-id-here/${PROJECT_ID}/" clouddeploy*.yaml
+sed -i "s/identifier/${IDENTIFIER}/" clouddeploy*.yaml
+```
+
+View Google Cloud Deploy pipelines in the:
+[Google Cloud Deploy UI](https://console.cloud.google.com/deploy/delivery-pipelines)
+
+#### 1. Just one cluster, with a canary
+
+```bash
+gcloud deploy apply --file clouddeploy-1.yaml --region=us-central1 --project=$PROJECT_ID
+
+# Need to push a canary deployment through or it will skip the first time
+gcloud deploy releases create rel-${IDENTIFIER}-1 \
+  --delivery-pipeline pop-stats-pipeline-${IDENTIFIER} \
+  --region us-central1 \
+  --images pop-stats=us-central1-docker.pkg.dev/catw-farm/pop-stats/pop-stats@sha256:15c2aa214cb50f9d374f933a5994006e0ba85df2fc3c00fb478ecb81f8b162ba
+```
+
+#### 2. Redundancy w/ multiple production targets
+
+```bash
+gcloud deploy apply --file clouddeploy-2.yaml --region=us-central1 --project=$PROJECT_ID
+```
+#### 3. Parallel deployment
+
+```bash
+gcloud deploy apply --file clouddeploy-3.yaml --region=us-central1 --project=$PROJECT_ID
+```
+
+#### 4. Add staging environment
+
+```bash
+gcloud deploy apply --file clouddeploy-3.yaml --region=us-central1 --project=$PROJECT_ID
+```
 
 ### Setup a Cloud Build trigger to deploy on merge to main
 
