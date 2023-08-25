@@ -6,7 +6,7 @@ metadata:
 description: pop-stats application delivery pipeline
 serialPipeline:
  stages:
- - targetId: prod1
+ - targetId: prod
    profiles:
    - prod
    strategy:
@@ -19,32 +19,15 @@ serialPipeline:
       canaryDeployment:
         percentages: [5]
         verify: true
- - targetId: prod2
-   profiles:
-   - prod
-   strategy:
-    canary:
-      runtimeConfig:
-        kubernetes:
-          serviceNetworking:
-            service: "pop-stats"
-            deployment: "pop-stats"
-      canaryDeployment:
-        percentages: [5]
-        verify: true
- - targetId: prod3
-   profiles:
-   - prod
-   strategy:
-    canary:
-      runtimeConfig:
-        kubernetes:
-          serviceNetworking:
-            service: "pop-stats"
-            deployment: "pop-stats"
-      canaryDeployment:
-        percentages: [5]
-        verify: true
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: prod
+description: prod multi-target
+requireApproval: true
+multiTarget:
+  targetIds: [prod1, prod2, prod3]
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target

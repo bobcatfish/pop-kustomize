@@ -82,24 +82,19 @@ View Google Cloud Deploy pipelines in the:
 gcloud deploy apply --file clouddeploy-1.yaml --region=us-central1 --project=$PROJECT_ID
 
 # Need to push a canary deployment through or it will skip the first time
-gcloud deploy releases create rel-${IDENTIFIER}-1 \
+export RELEASE=rel-$(date +%s)
+gcloud deploy releases create ${RELEASE} \
   --delivery-pipeline pop-stats-pipeline-${IDENTIFIER} \
   --region us-central1 \
   --images pop-stats=us-central1-docker.pkg.dev/catw-farm/pop-stats/pop-stats@sha256:15c2aa214cb50f9d374f933a5994006e0ba85df2fc3c00fb478ecb81f8b162ba
 ```
 
-#### 2. Redundancy w/ multiple production targets
+#### 2. Redundancy w/ multiple production targets and parallel deployment
 
 ```bash
 gcloud deploy apply --file clouddeploy-2.yaml --region=us-central1 --project=$PROJECT_ID
 ```
-#### 3. Parallel deployment
-
-```bash
-gcloud deploy apply --file clouddeploy-3.yaml --region=us-central1 --project=$PROJECT_ID
-```
-
-#### 4. Add staging environment
+#### 3. Add staging environment
 
 ```bash
 gcloud deploy apply --file clouddeploy-3.yaml --region=us-central1 --project=$PROJECT_ID
