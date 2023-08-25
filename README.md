@@ -94,6 +94,17 @@ gcloud deploy releases create ${RELEASE} \
 ```bash
 gcloud deploy apply --file clouddeploy-2.yaml --region=us-central1 --project=$PROJECT_ID
 ```
+
+Try it out with the bad image:
+
+```bash
+export RELEASE=bad-$(date +%s)
+gcloud deploy releases create ${RELEASE} \
+  --delivery-pipeline pop-stats-pipeline-${IDENTIFIER} \
+  --region us-central1 \
+  popstats=us-central1-docker.pkg.dev/catw-farm/pop-stats/pop-stats:dd9023d13ff0aef4891ac1d28fe90417b128d2da
+```
+```
 #### 3. Add staging environment
 
 ```bash
