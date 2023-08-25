@@ -26,4 +26,4 @@ metadata:
   name: prod
 description: prod cluster 1
 gke:
-  cluster: projects/project-id-here/locations/us-central1/clusters/production-1
+  cluster: projects/project-id-here/locations/us-central1/clusters/prodcluster1
